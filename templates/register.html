@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('{{ url_for('static', filename='pharmacy-background.jpg') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            backdrop-filter: blur(5px);
+        }
+        .container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input, select {
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .link-button {
+            background-color: #008CBA;
+            margin-top: 20px;
+        }
+        .link-button:hover {
+            background-color: #007B9A;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Register</h2>
+        <form method="POST">
+            <label for="full_name">Full Name:</label>
+            <input type="text" name="full_name" required>
+            <label for="pharmacy_phone">Pharmacy Phone Number:</label>
+            <input type="text" name="pharmacy_phone" required>
+            <label for="pharmacy_name">Pharmacy Name:</label>
+            <input type="text" name="pharmacy_name" required>
+            <label for="email">Email:</label>
+            <input type="email" name="email" required>
+            <label for="password">Password:</label>
+            <input type="password" name="password" required>
+            <label for="payment_method">Method of Payment:</label>
+            <select name="payment_method" required>
+                <option value="starbucks_gift_card">Starbucks Gift Card</option>
+                <option value="e_transfer">E-Transfer</option>
+                <option value="tim_hortons_gift_card">Tim Horton's Gift Card</option>
+                <option value="amazon_gift_card">Amazon Gift Card</option>
+            </select>
+            <button type="submit">Register</button>
+        </form>
+        <button class="link-button" onclick="location.href='{{ url_for('login') }}'">Login</button>
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
