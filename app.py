@@ -4,6 +4,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_mail import Mail, Message
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_talisman import Talisman
+
+app = Flask(__name__)
+Talisman(app)
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
