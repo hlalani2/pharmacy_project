@@ -14,4 +14,4 @@ SQLAlchemy==2.0.31
 typing_extensions==4.12.2
 Werkzeug==3.0.3
 wheel==0.43.0
-flask_talisman==0.8.1
+Flask-Talisman==0.7.0
