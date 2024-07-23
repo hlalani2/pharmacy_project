@@ -3,251 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-image: url('{{ url_for('static', filename='pharmacy-background.jpg') }}');
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-            backdrop-filter: blur(5px);
-            min-height: 100vh;
-        }
-        .container {
-            text-align: center;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 100%;
-            margin: 20px;
-        }
-        table {
-            margin: 20px auto;
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        label {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        input, textarea {
-            margin-bottom: 15px;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 100%;
-        }
-        button {
-            padding: 10px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            margin-top: 10px;
-            width: 100%;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .delete-button {
-            background-color: #f44336;
-            margin-top: 0;
-        }
-        .delete-button:hover {
-            background-color: #da190b;
-        }
-        .cashout {
-            margin-top: 20px;
-        }
-        .cash {
-            display: none;
-        }
-        .link-button {
-            background-color: #008CBA;
-            margin-top: 20px;
-        }
-        .link-button:hover {
-            background-color: #007B9A;
-        }
-        .balloon {
-            position: absolute;
-            bottom: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 150px;
-            transition: width 1s ease-in-out;
-        }
-        .balloon.float {
-            animation: float 4s linear forwards;
-        }
-        .balloon.float1 {
-            animation: float1 4s linear forwards;
-        }
-        .balloon.float2 {
-            animation: float2 4s linear forwards;
-        }
-        .balloon.float3 {
-            animation: float3 4s linear forwards;
-        }
-        @keyframes float1 {
-            0% {
-                bottom: 50px;
-                left: 50%;
-                transform: translateX(-50%);
-                opacity: 1;
-            }
-            100% {
-                bottom: 100vh;
-                left: 10%;
-                transform: translateX(-10%);
-                opacity: 0;
-            }
-        }
-        @keyframes float2 {
-            0% {
-                bottom: 50px;
-                left: 50%;
-                transform: translateX(-50%);
-                opacity: 1;
-            }
-            100% {
-                bottom: 100vh;
-                left: 50%;
-                transform: translateX(-50%);
-                opacity: 0;
-            }
-        }
-        @keyframes float3 {
-            0% {
-                bottom: 50px;
-                left: 50%;
-                transform: translateX(-50%);
-                opacity: 1;
-            }
-            100% {
-                bottom: 100vh;
-                left: 90%;
-                transform: translateX(-90%);
-                opacity: 0;
-            }
-        }
-        .wheel-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 200px;
-            margin: 20px 0;
-        }
-        .wheel {
-            border: 5px solid #4CAF50;
-            border-radius: 50%;
-            height: 150px;
-            width: 150px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: #4CAF50;
-            transition: transform 0.5s ease-in-out;
-        }
-        .added-fee {
-            animation: grow 0.5s ease-in-out forwards;
-        }
-        @keyframes grow {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-        .product-list {
-            margin-top: 20px;
-            text-align: left;
-            display: flex;
-            justify-content: space-around;
-        }
-        .product-item {
-            cursor: pointer;
-            color: #4CAF50;
-            font-weight: bold;
-            margin: 5px 0;
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            border: 1px solid #4CAF50;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .product-item.selected {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .counseling-points {
-            margin-top: 20px;
-            text-align: left;
-        }
-        .counseling-points ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .counseling-points li {
-            margin-bottom: 5px;
-        }
-        .edit-profile-button {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background-color: black;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 14px;
-            z-index: 1000;
-        }
-        .edit-profile-button:hover {
-            background-color: #333;
-        }
-    </style>
+    <title>Pharmacy Dashboard</title>
+    <!-- CSS Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard_styles.css') }}">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <img src="{{ url_for('static', filename='phlicon.png') }}" alt="Logo" height="40">
+        </div>
+        <div class="nav-right">
+            <a href="{{ url_for('dashboard') }}" class="active">Dashboard</a>
+            <a href="{{ url_for('profile') }}">Edit Profile</a>
+            <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Container -->
+    <div class="container">
+        <div class="section">
+            <h2>Welcome, {{ current_user.full_name }}!</h2>
+            <div class="line"></div>
+            <div class="wheel-container">
+                <div id="wheel" class="wheel">${{ '%.2f' | format(current_user.wheel_total) }}</div>
+            </div>
+            <div class="line"></div>
+            <h2 style="display: flex; justify-content: space-evenly;">
+                <span>Total Counseling Fees:</span>
+                <span>${{ '%.2f' | format(cashout_total) }}</span>
+            </h2>
+            <div class="line"></div>
+        </div>
+
+        <div class="section">
+            <h2>Products</h2>
+            <div class="product-list">
+                <div class="product-item" data-product="Zensa 30g">Zensa 30g</div>
+                <div class="product-item" data-product="S. Boulardii">S. Boulardii</div>
+            </div>
+        </div>
+
+        <div class="section counseling-points" id="counseling-points">
+            <h2>Counseling Points:</h2>
+            <ul id="counseling-list">
+                <!-- Counseling points will be dynamically inserted here -->
+            </ul>
+        </div>
+
+        <div class="section">
+            <form method="POST" action="{{ url_for('counsel') }}" onsubmit="setFee()">
+                <input type="hidden" name="product" id="product">
+                <input type="hidden" name="fee" id="fee">
+                <h2>
+                    <label style="color: #0b3926" for="indication">Counselled Indication:</label>
+                </h2>
+                <textarea name="indication" id="indication" placeholder="Enter indication" required aria-label="Counselled Indication"></textarea>
+                <button type="submit">Add Counseling</button>
+            </form>
+        </div>
+
+        <div class="section table-container">
+            <h2>Your Counseling History</h2>
+            <table>
+                <tr>
+                    <th>Product</th>
+                    <th>Fee</th>
+                    <th>Indication</th>
+                    <th>Cashed Out</th>
+                    <th>Action</th>
+                </tr>
+                {% for counseling in counselings %}
+                    <tr>
+                        <td>{{ counseling.product }}</td>
+                        <td>${{ '%.2f' | format(counseling.fee) }}</td>
+                        <td>{{ counseling.indication }}</td>
+                        <td>{{ 'Yes' if counseling.cashed_out else 'No' }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('delete_counseling', id=counseling.id) }}">
+                                <button type="submit" class="delete-button">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div>
+            <form method="POST" action="{{ url_for('cashout') }}" id="cashout-form">
+                <button type="button" class="cashout" onclick="showCash()">Cashout</button>
+            </form>
+            <br>
+        </div>
+    </div>
+
+    <!-- Audio element for cash out sound -->
+    <audio id="cash-sound" src="{{ url_for('static', filename='cashout.mp3') }}"></audio>
+
     <script>
         let selectedProduct = null;
 
         function showCash() {
-            const cashContainer = document.getElementById('cash-container');
-
-            for (let i = 1; i <= 3; i++) {
-                const balloon = document.createElement('img');
-                balloon.src = '{{ url_for('static', filename='floating_red_balloons.png') }}';
-                balloon.className = `balloon float${i}`;
-                cashContainer.appendChild(balloon);
-            }
+            // Create a confetti container
+            const confettiContainer = document.createElement('div');
+            confettiContainer.classList.add('confetti');
+            document.body.appendChild(confettiContainer);
 
             // Play cash out sound
-            var cashSound = document.getElementById('cash-sound');
+            const cashSound = document.getElementById('cash-sound');
             cashSound.play();
+
+            // Confetti animation logic
+            for (let i = 0; i < 100; i++) {
+                const confettiPiece = document.createElement('div');
+                confettiPiece.className = 'confetti-piece';
+                confettiPiece.style.left = `${Math.random() * 100}vw`;
+                confettiPiece.style.animationDelay = `${Math.random() * 5}s`;
+                confettiPiece.innerText = '💵';
+                confettiContainer.appendChild(confettiPiece);
+            }
 
             setTimeout(() => {
                 document.getElementById('cashout-form').submit();
-            }, 5000);
+            }, 50);
         }
 
         function setFee() {
@@ -265,10 +149,6 @@
             }
         }
 
-        function setFeeOnLoad() {
-            setFee(); // Ensure fee is set correctly on page load
-        }
-
         function animateWheel() {
             const wheel = document.getElementById('wheel');
             wheel.classList.add('added-fee');
@@ -279,12 +159,13 @@
 
         function showCounselingPoints(product) {
             const points = {{ counseling_points | tojson | default({}) }};
-            const pointsContainer = document.getElementById('counseling-points');
-            pointsContainer.innerHTML = '<h3>Counseling Points for ' + product + ':</h3><ul>';
+            const pointsContainer = document.getElementById('counseling-list');
+            pointsContainer.innerHTML = ''; // Clear previous points
             points[product].forEach(point => {
-                pointsContainer.innerHTML += '<li>' + point + '</li>';
+                const listItem = document.createElement('li');
+                listItem.textContent = point;
+                pointsContainer.appendChild(listItem);
             });
-            pointsContainer.innerHTML += '</ul>';
         }
 
         function selectProduct(product) {
@@ -312,68 +193,5 @@
             });
         });
     </script>
-</head>
-<body onload="setFeeOnLoad()">
-    <div id="cash-container"></div>
-    <a href="{{ url_for('profile') }}" class="edit-profile-button">Edit Profile</a>
-    <div class="container">
-        <h1>Welcome, {{ current_user.full_name }}!</h1>
-        <div class="wheel-container">
-            <div id="wheel" class="wheel">${{ current_user.wheel_total }}</div>
-        </div>
-        <h2>Total Counseling Fees: ${{ cashout_total }}</h2>
-
-        <div class="product-list">
-            <h3>Products:</h3>
-            <div class="product-item" data-product="Zensa 30g">Zensa 30g</div>
-            <div class="product-item" data-product="S. Boulardii">S. Boulardii</div>
-        </div>
-
-        <div id="counseling-points" class="counseling-points"></div>
-
-        <form method="POST" action="{{ url_for('counsel') }}" onsubmit="setFee()">
-            <input type="hidden" name="product" id="product">
-            <input type="hidden" name="fee" id="fee">
-            <label for="indication">Counselled Indication:</label>
-            <textarea name="indication" id="indication" required></textarea>
-            <button type="submit">Add Counseling</button>
-        </form>
-
-        <h3>Your Counseling History:</h3>
-        <table>
-            <tr>
-                <th>Product</th>
-                <th>Fee</th>
-                <th>Indication</th>
-                <th>Cashed Out</th>
-                <th>Action</th>
-            </tr>
-            {% for counseling in counselings %}
-                <tr>
-                    <td>{{ counseling.product }}</td>
-                    <td>${{ counseling.fee }}</td>
-                    <td>{{ counseling.indication }}</td>
-                    <td>{{ 'Yes' if counseling.cashed_out else 'No' }}</td>
-                    <td>
-                        <form method="POST" action="{{ url_for('delete_counseling', id=counseling.id) }}">
-                            <button type="submit" class="delete-button">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-        <form method="POST" action="{{ url_for('cashout') }}" id="cashout-form">
-            <button type="button" class="cashout" onclick="showCash()">Cashout</button>
-        </form>
-        <div id="cash" class="cash">
-            <img src="{{ url_for('static', filename='cash.png') }}" alt="Cash Image" style="width:100px;">
-            <p>You have cashed out your counseling fees!</p>
-        </div>
-        <br>
-        <button class="link-button" onclick="location.href='{{ url_for('logout') }}'">Logout</button>
-    </div>
-
-    <!-- Audio element for cash out sound -->
-    <audio id="cash-sound" src="{{ url_for('static', filename='cashout.mp3') }}"></audio>
 </body>
 </html>
