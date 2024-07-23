@@ -137,7 +137,7 @@ def cashout():
 
     # Send email
     try:
-        msg = Message('Cashout Summary', recipients=['hassan.l@phldistributions.com'])
+        msg = Message('Cashout Summary', recipients=['hassan.l@phldistributions.com', User.email])
         msg.body = f"User {current_user.full_name} has cashed out.\n\n"
         msg.body += "Counselings:\n"
         for counseling in uncased_counselings:

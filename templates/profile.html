@@ -4,94 +4,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-image: url('{{ url_for('static', filename='pharmacy-background.jpg') }}');
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-            backdrop-filter: blur(5px);
-        }
-        .container {
-            text-align: center;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            width: 100%;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        label {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        input, select {
-            margin-bottom: 15px;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            padding: 10px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .link-button {
-            background-color: #008CBA;
-            margin-top: 20px;
-        }
-        .link-button:hover {
-            background-color: #007B9A;
-        }
-        .error-message {
-            color: red;
-            margin-top: 10px;
-        }
-    </style>
+    <!-- CSS Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='profile_styles.css') }}">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <img src="{{ url_for('static', filename='phlicon.png') }}" alt="Logo" height="40">
+        </div>
+        <div class="nav-right">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('profile') }}" class="active">Edit Profile</a>
+            <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Edit Profile Container -->
     <div class="container">
         <h2>Edit Profile</h2>
         <form method="POST" action="{{ url_for('profile') }}">
             <label for="full_name">Full Name:</label>
-            <input type="text" name="full_name" value="{{ current_user.full_name }}" required>
+            <input type="text" name="full_name" id="full_name" value="{{ current_user.full_name }}" required aria-label="Full Name" placeholder="Enter your full name">
             <label for="pharmacy_phone">Pharmacy Phone Number:</label>
-            <input type="text" name="pharmacy_phone" value="{{ current_user.pharmacy_phone }}" required>
+            <input type="text" name="pharmacy_phone" id="pharmacy_phone" value="{{ current_user.pharmacy_phone }}" required aria-label="Pharmacy Phone Number" placeholder="Enter your pharmacy phone number">
             <label for="pharmacy_name">Pharmacy Name:</label>
-            <input type="text" name="pharmacy_name" value="{{ current_user.pharmacy_name }}" required>
+            <input type="text" name="pharmacy_name" id="pharmacy_name" value="{{ current_user.pharmacy_name }}" required aria-label="Pharmacy Name" placeholder="Enter your pharmacy name">
             <label for="email">Email:</label>
-            <input type="email" name="email" value="{{ current_user.email }}" required>
+            <input type="email" name="email" id="email" value="{{ current_user.email }}" required aria-label="Email" placeholder="Enter your email">
             <label for="payment_method">Method of Payment:</label>
-            <select name="payment_method" required>
-                <option value="starbucks_gift_card" {% if current_user.payment_method == 'starbucks_gift_card' %}selected{% endif %}>Starbucks Gift Card</option>
-                <option value="e_transfer" {% if current_user.payment_method == 'e_transfer' %}selected{% endif %}>E-Transfer</option>
-                <option value="tim_hortons_gift_card" {% if current_user.payment_method == 'tim_hortons_gift_card' %}selected{% endif %}>Tim Horton's Gift Card</option>
-                <option value="amazon_gift_card" {% if current_user.payment_method == 'amazon_gift_card' %}selected{% endif %}>Amazon Gift Card</option>
-            </select>
+            <div class="custom-select-wrapper">
+                <select class="custom-select" name="payment_method" id="payment_method" required aria-label="Method of Payment">
+                    <option value="starbucks_gift_card" {% if current_user.payment_method == 'starbucks_gift_card' %}selected{% endif %}>Starbucks Gift Card</option>
+                    <option value="e_transfer" {% if current_user.payment_method == 'e_transfer' %}selected{% endif %}>E-Transfer</option>
+                    <option value="tim_hortons_gift_card" {% if current_user.payment_method == 'tim_hortons_gift_card' %}selected{% endif %}>Tim Horton's Gift Card</option>
+                    <option value="amazon_gift_card" {% if current_user.payment_method == 'amazon_gift_card' %}selected{% endif %}>Amazon Gift Card</option>
+                </select>
+            </div>
             <label for="password">New Password:</label>
-            <input type="password" name="password">
+            <div class="password-container">
+                <input 
+                    type="password"
+                    name="password"
+                    id="password"
+                    aria-label="New password" 
+                    placeholder="Enter your new password"
+                    required>
+                <span class="eye-icon" onclick="togglePassword()">
+                    <i class="fas fa-eye"></i>
+                </span>
+            </div>
             <button type="submit">Save Changes</button>
         </form>
-        <button class="link-button" onclick="location.href='{{ url_for('dashboard') }}'">Back to Dashboard</button>
+        <button style="width: 100%;" class="link-button" onclick="location.href='{{ url_for('dashboard') }}'">Back to Dashboard</button>
     </div>
+
+    <script>
+        function togglePassword() {
+            var passwordInput = document.getElementById("password");
+            var eyeIcon = document.querySelector(".eye-icon i");
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                eyeIcon.classList.remove("fa-eye");
+                eyeIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                eyeIcon.classList.remove("fa-eye-slash");
+                eyeIcon.classList.add("fa-eye");
+            }
+        }
+    </script>
 </body>
 </html>
