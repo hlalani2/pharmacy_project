@@ -120,19 +120,29 @@
             cashSound.play();
 
             // Confetti animation logic
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 200; i++) {
                 const confettiPiece = document.createElement('div');
                 confettiPiece.className = 'confetti-piece';
-                confettiPiece.style.left = `${Math.random() * 100}vw`;
-                confettiPiece.style.animationDelay = `${Math.random() * 5}s`;
+                confettiPiece.style.left = `50vw`;
+                confettiPiece.style.top = `50vh`;
+                confettiPiece.style.setProperty('--x-movement', `${Math.random() * 600 - 300}vw`);
+                confettiPiece.style.setProperty('--y-movement', `${Math.random() * 600 - 300}vh`);
+                confettiPiece.style.animationDelay = `${Math.random() * 0.5}s`;
                 confettiPiece.innerText = '💵';
                 confettiContainer.appendChild(confettiPiece);
             }
 
             setTimeout(() => {
                 document.getElementById('cashout-form').submit();
-            }, 50);
+                confettiContainer.remove();
+            }, 1000);
         }
+
+        function getRandomMovement() {
+            return Math.random() * 500 - 100; // Movement range from -100vw to 100vw
+        }
+
+
 
         function setFee() {
             const feeInput = document.getElementById('fee');
@@ -154,7 +164,7 @@
             wheel.classList.add('added-fee');
             setTimeout(() => {
                 wheel.classList.remove('added-fee');
-            }, 500);
+            }, 1000);
         }
 
         function showCounselingPoints(product) {

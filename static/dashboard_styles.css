@@ -1,3 +1,5 @@
+/* CSS Styles */
+
 body {
     font-family: "Inter", sans-serif;
     margin: 0;
@@ -196,9 +198,8 @@ th, td {
 }
 .confetti {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
@@ -208,29 +209,19 @@ th, td {
 
 .confetti-piece {
     position: absolute;
-    font-size: 24px;
-    animation: blow 5s linear infinite;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    animation: confetti-pop 5s linear infinite;
 }
 
-@keyframes blow {
+@keyframes confetti-pop {
     0% {
-        transform: translate3d(0, 0, 0) rotate(0);
         opacity: 1;
-    }
-    25% {
-        transform: translate3d(30vw, 100vh, 0) rotate(180deg);
-        opacity: 0.8;
-    }
-    50% {
-        transform: translate3d(100vw, 100vh, 0) rotate(360deg);
-        opacity: 0.6;
-    }
-    75% {
-        transform: translate3d(100vw, 100vh, 0) rotate(540deg);
-        opacity: 0.4;
+        transform: translate(0, 0) scale(1);
     }
     100% {
-        transform: translate3d(100vw, 100vh, 0) rotate(720deg);
-        opacity: 0.2;
+        opacity: 0;
+        transform: translate(var(--x-movement), var(--y-movement)) scale(0.5);
     }
 }
