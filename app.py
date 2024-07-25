@@ -97,14 +97,15 @@ def dashboard():
     # Hardcoded counseling points for products
     counseling_points = {
         "Zensa 30g": [
-            "Apply a small amount to the affected area.",
-            "Do not use more than directed.",
-            "Consult a doctor if irritation occurs."
+            "Clean and exfoliate skin",
+            "DO NOT RUB IN",
+            "Leave on the skin for 20-40 minutes",
+            "Apply a Thick Layer of cream",
+            "Cover with seran wrap or air tight dress"
         ],
-        "S. Boulardii": [
-            "Take one capsule daily.",
-            "Store in a cool, dry place.",
-            "Consult a healthcare provider before use."
+        "Optibac S.Boulardii": [
+            "Yeast Based Probiotic so not eliminated by antibiotics",
+            "Take with your antibiotics to reduce antibiotic associated diarrhea"
         ]
     }
 
