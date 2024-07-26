@@ -101,7 +101,7 @@ def dashboard():
             "DO NOT RUB IN",
             "Leave on the skin for 20-40 minutes",
             "Apply a Thick Layer of cream",
-            "Cover with seran wrap or air tight dress"
+            "Cover with seran wrap or air tight dressing"
         ],
         "Optibac S.Boulardii": [
             "Yeast Based Probiotic so not eliminated by antibiotics",
