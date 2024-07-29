@@ -27,7 +27,7 @@ db = SQLAlchemy(app)
 mail = Mail(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
-AUTHORIZED_USERS = ['itstirm@gmail.com', 'alalani@phldistributions.com']
+AUTHORIZED_USERS = ['itstirm@gmail.com', 'alalani@phldistributions.com', 'hassan.l@phldistributions.com']
 
 # Create instance folder if it doesn't exist
 try:
