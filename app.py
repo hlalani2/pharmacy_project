@@ -27,6 +27,7 @@ db = SQLAlchemy(app)
 mail = Mail(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
+AUTHORIZED_USERS = ['itstirm@gmail.com', 'alalani@phldistributions.com']
 
 # Create instance folder if it doesn't exist
 try:
@@ -85,6 +86,18 @@ def register():
         login_user(new_user)
         return redirect(url_for('dashboard'))
     return render_template('register.html')
+
+@app.route('/admin_dashboard')
+@login_required
+def admin_dashboard():
+    if current_user.email not in AUTHORIZED_USERS:
+        return "Unauthorized", 403
+    
+    users = User.query.all()
+    counselings = Counseling.query.all()
+
+    return render_template('admin_dashboard.html', users=users, counselings=counselings)
+
 
 @app.route('/dashboard')
 @login_required
@@ -154,6 +167,44 @@ def cashout():
     flash('You have successfully cashed out.')
     return redirect(url_for('dashboard'))
 
+@app.route('/edit_user/<int:user_id>', methods=['POST'])
+@login_required
+def edit_user(user_id):
+    if current_user.email not in AUTHORIZED_USERS:
+        return "Unauthorized", 403
+
+    user = User.query.get_or_404(user_id)
+    user.email = request.form.get('email')
+    user.full_name = request.form.get('full_name')
+    user.pharmacy_phone = request.form.get('pharmacy_phone')
+    user.pharmacy_name = request.form.get('pharmacy_name')
+    user.payment_method = request.form.get('payment_method')
+    user.counseling_fees = float(request.form.get('counseling_fees'))
+    user.wheel_total = float(request.form.get('wheel_total'))
+    
+    db.session.commit()
+    flash('User information updated successfully.')
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/edit_counseling/<int:counseling_id>', methods=['POST'])
+@login_required
+def edit_counseling(counseling_id):
+    if current_user.email not in AUTHORIZED_USERS:
+        return "Unauthorized", 403
+
+    counseling = Counseling.query.get_or_404(counseling_id)
+    counseling.product = request.form.get('product')
+    counseling.fee = float(request.form.get('fee'))
+    counseling.indication = request.form.get('indication')
+    counseling.cashed_out = request.form.get('cashed_out') == 'True'
+    
+    db.session.commit()
+    flash('Counseling information updated successfully.')
+    return redirect(url_for('admin_dashboard'))
+
+
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -168,12 +219,14 @@ def login():
         if user and check_password_hash(user.password, password):
             print("Password is correct")
             login_user(user)
+            if user.email in AUTHORIZED_USERS:
+                return redirect(url_for('admin_dashboard'))
             return redirect(url_for('dashboard'))
         else:
-            print("Invalid email or password")
             flash('Invalid email or password')
             return render_template('login.html', error='Invalid email or password')  # Return render_template to keep form filled
     return render_template('login.html')
+
 
 @app.route('/logout')
 @login_required
