@@ -12,7 +12,7 @@ Talisman(app)
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
     SECRET_KEY='your_secret_key',
-    SQLALCHEMY_DATABASE_URI='sqlite:///' + os.path.join(app.instance_path, 'pharmacy.sqlite'),
+    SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URL', 'sqlite:///' + os.path.join(app.instance_path, 'pharmacy.sqlite')),
     SQLALCHEMY_TRACK_MODIFICATIONS=False,
     MAIL_SERVER='smtp.gmail.com',
     MAIL_PORT=587,
