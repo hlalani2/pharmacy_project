@@ -116,6 +116,13 @@ def dashboard():
             "Apply a Thick Layer of cream",
             "Cover with seran wrap or air tight dressing"
         ],
+        "Zensa 2.5g": [
+            "Clean and exfoliate skin",
+            "DO NOT RUB IN",
+            "Leave on the skin for 20-40 minutes",
+            "Apply a Thick Layer of cream",
+            "Cover with seran wrap or air tight dressing"
+        ],
         "Optibac S.Boulardii": [
             "Yeast Based Probiotic so not eliminated by antibiotics",
             "Take with your antibiotics to reduce antibiotic associated diarrhea"
@@ -128,7 +135,12 @@ def dashboard():
 @login_required
 def counsel():
     product = request.form.get('product')
-    fee = 5.00 if product == "Zensa 30g" else 2.00
+    fee_structure = {
+        "Zensa 30g": 5.00,
+        "Zensa 2.5g": 2.00,
+        "Optibac S.Boulardii": 7.00
+    }
+    fee = fee_structure[product]
     indication = request.form.get('indication')
     new_counseling = Counseling(user_id=current_user.id, product=product, fee=fee, indication=indication)
     current_user.counseling_fees += fee
