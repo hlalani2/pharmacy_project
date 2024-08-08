@@ -137,7 +137,7 @@ def counsel():
     product = request.form.get('product')
     fee_structure = {
         "Zensa 30g": 5.00,
-        "Zensa 2.5g": 2.00,
+        "Zensa 2.5g": 0.4,
         "Optibac S.Boulardii": 7.00
     }
     fee = fee_structure[product]
