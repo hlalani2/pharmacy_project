@@ -7,6 +7,7 @@ body {
     min-height: 100vh;
     color: white;
 }
+
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -18,6 +19,7 @@ body {
     background-color: white;
     color: black;
 }
+
 .navbar a {
     text-decoration: none;
     margin: 0 10px;
@@ -26,23 +28,28 @@ body {
     text-transform: uppercase;
     transition: background-color 0.3s ease;
 }
+
 .navbar a:hover {
     background-color: #54804a;
     color: white;
 }
+
 .navbar a.active {
     background-color: #54804a;
     color: white;
 }
+
 .navbar .logout-button {
     border: 2px solid #0b3926;
     border-radius: 5px;
     color: black;
 }
+
 .navbar .logout-button:hover {
     background-color: #0b3926;
     color: white;
 }
+
 .container {
     text-align: center;
     background-color: #ffffff;
@@ -54,13 +61,16 @@ body {
     margin: 20px auto;
     color: black;
 }
+
 .section {
     margin-bottom: 40px;
 }
+
 .section h2 {
     margin-bottom: 20px;
     color: #0b3926;
 }
+
 .wheel-container {
     display: flex;
     justify-content: center;
@@ -68,32 +78,51 @@ body {
     height: 200px;
     margin: 20px 0;
 }
+
 .wheel {
     border: 15px solid #54804a; /* Increased thickness */
     border-radius: 50%;
     height: 150px;
     width: 150px;
     display: flex;
+    flex-direction: column; /* Added for vertical alignment */
     justify-content: center;
     align-items: center;
     font-size: 24px;
     font-weight: bold;
     color: #54804a;
     transition: transform 0.5s ease-in-out;
+    text-align: center; /* Center the text horizontally */
 }
+
+.wheel span {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.wheel p {
+    margin: 0;
+    font-size: 16px;
+    color: #666; /* Slightly darker gray for contrast */
+}
+
 .added-fee {
     animation: grow 0.5s ease-in-out forwards;
 }
+
 @keyframes grow {
     0% { transform: scale(1); }
     50% { transform: scale(1.2); }
     100% { transform: scale(1); }
 }
+
 .product-list {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
 }
+
 .product-item {
     cursor: pointer;
     color: #0b3926;
@@ -104,14 +133,17 @@ body {
     border-radius: 5px;
     transition: background-color 0.3s, color 0.3s;
 }
+
 .product-item.selected {
     background-color: #0b3926;
     color: white;
 }
+
 .product-item:hover {
     background-color: #0b3926;
     color: white;
 }
+
 .counseling-points {
     text-align: left;
     margin: 20px 0;
@@ -119,13 +151,16 @@ body {
     border: 2px solid #54804a;
     border-radius: 10px;
 }
+
 .counseling-points ul {
     list-style-type: none;
     padding: 0;
 }
+
 .counseling-points li {
     margin-bottom: 10px;
 }
+
 form {
     display: flex;
     flex-direction: column;
@@ -133,11 +168,13 @@ form {
     padding: 20px;
     border-radius: 10px;
 }
+
 form label {
     font-weight: bold;
     margin-bottom: 5px;
     color: #54804a;
 }
+
 form input, form textarea {
     margin-bottom: 15px;
     padding: 10px;
@@ -146,6 +183,7 @@ form input, form textarea {
     border-radius: 5px;
     width: 100%;
 }
+
 form button {
     padding: 10px;
     font-size: 16px;
@@ -157,36 +195,44 @@ form button {
     width: 100%;
     transition: background-color 0.3s ease;
 }
+
 form button:hover {
     background-color: #0b3926;
 }
+
 .table-container {
     overflow-x: auto;
 }
+
 table {
     margin: 20px auto;
     border-collapse: collapse;
     width: 100%;
 }
+
 th, td {
     padding: 10px;
     text-align: center;
     border-bottom: 1px solid #ddd;
 }
+
 .delete-button {
     background-color: #f44336;
     color: white;
     cursor: pointer;
 }
+
 .delete-button:hover {
     background-color: #da190b;
 }
+
 .line {
     width: 100%;
     height: 2px;
     background-color: #54804a;
     margin: 20px 0;
 }
+
 @media (max-width: 600px) {
     .navbar {
         flex-direction: column;
@@ -196,6 +242,7 @@ th, td {
         margin: 5px 0;
     }
 }
+
 .confetti {
     position: fixed;
     top: 0;
