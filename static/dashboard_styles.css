@@ -272,3 +272,31 @@ th, td {
         transform: translate(var(--x-movement), var(--y-movement)) scale(0.5);
     }
 }
+
+/* Custom style for delete button */
+.delete-btn {
+    padding: 4px;
+    font-size: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #dc3545;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: auto; /* Adjust width if needed */
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+/* Override for the specific purge button */
+.purge-btn {
+    background-color: #dc3545 !important;
+    color: white !important;
+    width: auto; /* Optional: Adjust the width if necessary */
+}
+
+.purge-btn:hover {
+    background-color: #c82333 !important;
+}

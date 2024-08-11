@@ -38,6 +38,7 @@
             <th>Payment Method</th>
             <th>Counseling Fees</th>
             <th>Wheel Total</th>
+            <th>Deleted</th>
             <th>Actions</th>
         </tr>
         {% for user in users %}
@@ -51,7 +52,13 @@
             <td>{{ user.counseling_fees }}</td>
             <td>{{ user.wheel_total }}</td>
             <td>
+                <input type="checkbox" disabled {{ 'checked' if user.is_deleted else '' }}>
+            </td>
+            <td>
                 <button onclick="document.getElementById('editForm{{ user.id }}').style.display='block'">Edit</button>
+                <button onclick="deleteUser({{ user.id }}, '{{ user.email }}')" class="delete-btn" {{ 'hidden' if user.is_deleted else '' }}>
+                    <i class="fas fa-times"></i>
+                </button>
                 <div id="editForm{{ user.id }}" style="display:none;">
                     <form action="{{ url_for('edit_user', user_id=user.id) }}" method="POST">
                         <label for="email">Email:</label>
@@ -68,6 +75,8 @@
                         <input type="number" step="0.01" name="counseling_fees" value="{{ user.counseling_fees }}" required><br>
                         <label for="wheel_total">Wheel Total:</label>
                         <input type="number" step="0.01" name="wheel_total" value="{{ user.wheel_total }}" required><br>
+                        <label for="is_deleted">Deleted:</label>
+                        <input type="checkbox" name="is_deleted" {{ 'checked' if user.is_deleted else '' }}><br>
                         <button type="submit">Save</button>
                     </form>
                     <button onclick="document.getElementById('editForm{{ user.id }}').style.display='none'">Cancel</button>
@@ -75,6 +84,17 @@
             </td>
         </tr>
         {% endfor %}
+        <tr>
+            <td colspan="10" style="text-align:center;">
+                <div id="purge-form">
+                    <form action="{{ url_for('purge_deleted_users') }}" method="POST" style="margin-top: 20px;">
+                        <button type="submit" class="purge-btn">
+                            Purge Deleted Users
+                        </button>
+                    </form>
+                </div>
+            </td>
+        </tr>
     </table>
 
     <h2>All Counselings</h2>
@@ -119,5 +139,62 @@
         </tr>
         {% endfor %}
     </table>
+
+    <script>
+        function deleteUser(userId, email) {
+            const message = `Are you sure you want to delete user ID ${userId}: email ${email}?`;
+            if (confirm(message)) {
+                fetch(`/delete_and_reset_user/${userId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw new Error(data.error || 'Unknown error occurred');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Refresh the page to reflect updated user state
+                        document.location.reload();
+                    } else {
+                        alert(data.error || 'Error deleting user');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while deleting the user: ' + error.message);
+                });
+            }
+        }
+
+        document.getElementById('purge-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            if (confirm('Are you sure you want to purge all deleted users? This action cannot be undone.')) {
+                fetch('{{ url_for("purge_deleted_users") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Deleted users have been purged successfully.');
+                        window.location.reload();
+                    } else {
+                        alert('Failed to purge deleted users: ' + data.error);
+                    }
+                })
+                .catch(error => alert('An error occurred: ' + error));
+            }
+        });
+
+    </script>
 </body>
 </html>

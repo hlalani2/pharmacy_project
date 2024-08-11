@@ -61,6 +61,8 @@
                     <i class="fas fa-eye"></i>
                 </span>
             </div>
+            <label for="is_deleted">Deleted:</label>
+            <input type="checkbox" disabled name="is_deleted" {{ 'checked' if current_user.is_deleted else '' }}>
             <button type="submit">Save Changes</button>
         </form>
         <button style="width: 100%;" class="link-button" onclick="location.href='{{ url_for('dashboard') }}'">Back to Dashboard</button>

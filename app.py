@@ -1,13 +1,16 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, jsonify, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_mail import Mail, Message
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_talisman import Talisman
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 Talisman(app)
+
+DELETED_PREFIX = 'deleted_'
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
@@ -29,6 +32,9 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 AUTHORIZED_USERS = ['itstirm@gmail.com', 'alalani@phldistributions.com', 'hassan.l@phldistributions.com']
 
+# Enable Flask-Migrate
+migrate = Migrate(app, db)
+
 # Create instance folder if it doesn't exist
 try:
     os.makedirs(app.instance_path)
@@ -45,8 +51,9 @@ class User(UserMixin, db.Model):
     payment_method = db.Column(db.String(150), nullable=False)
     counseling_fees = db.Column(db.Float, default=0.0)
     wheel_total = db.Column(db.Float, default=0.0)
+    is_deleted = db.Column(db.Boolean, default=False, nullable=False)
 
-    def __init__(self, email, password, full_name, pharmacy_phone, pharmacy_name, payment_method):
+    def __init__(self, email, password, full_name, pharmacy_phone, pharmacy_name, payment_method, is_deleted=False):
         self.email = email
         self.password = password
         self.full_name = full_name
@@ -80,7 +87,7 @@ def register():
         pharmacy_name = request.form.get('pharmacy_name')
         payment_method = request.form.get('payment_method')
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-        new_user = User(email=email, full_name=full_name, password=hashed_password, pharmacy_phone=pharmacy_phone, pharmacy_name=pharmacy_name, payment_method=payment_method)
+        new_user = User(email=email, full_name=full_name, password=hashed_password, pharmacy_phone=pharmacy_phone, pharmacy_name=pharmacy_name, payment_method=payment_method, is_deleted=False)
         db.session.add(new_user)
         db.session.commit()
         login_user(new_user)
@@ -193,6 +200,12 @@ def edit_user(user_id):
     user.payment_method = request.form.get('payment_method')
     user.counseling_fees = float(request.form.get('counseling_fees'))
     user.wheel_total = float(request.form.get('wheel_total'))
+    user.is_deleted = bool(request.form.get('is_deleted'))
+
+    if not user.is_deleted:
+        # Trim DELETED_PREFIX if it exists in the email and the user is undeleted
+        if user.email.startswith(DELETED_PREFIX):
+            user.email = user.email[len(DELETED_PREFIX):]
     
     db.session.commit()
     flash('User information updated successfully.')
@@ -209,13 +222,46 @@ def edit_counseling(counseling_id):
     counseling.fee = float(request.form.get('fee'))
     counseling.indication = request.form.get('indication')
     counseling.cashed_out = request.form.get('cashed_out') == 'True'
-    
+
     db.session.commit()
     flash('Counseling information updated successfully.')
     return redirect(url_for('admin_dashboard'))
 
+@app.route('/delete_and_reset_user/<int:user_id>', methods=['POST'])
+@login_required
+def delete_and_reset_user(user_id):
+    try:
+        if current_user.email not in AUTHORIZED_USERS:
+            return jsonify({'success': False, 'error': "Unauthorized"}), 403
+        if current_user.id == user_id:
+            return jsonify({'success': False, 'error': "Cannot delete the currently logged-in user."}), 400
 
+        user = User.query.get_or_404(user_id)
+        user.is_deleted = True
+        # Add DELETED_PREFIX if it exists and the user is deleted
+        if not user.email.startswith('deleted_'):
+            user.email = f'{DELETED_PREFIX}{user.email}'  # Anonymize email
+        db.session.commit()
+        flash('User has been marked as deleted and email reset.')
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
 
+@app.route('/purge_deleted_users', methods=['POST'])
+@login_required
+def purge_deleted_users():
+    if current_user.email not in AUTHORIZED_USERS:
+        return jsonify({'success': False, 'error': "Unauthorized"}), 403
+
+    try:
+        deleted_users = User.query.filter_by(is_deleted=True).all()
+        for user in deleted_users:
+            db.session.delete(user)
+        db.session.commit()
+        flash('Deleted users have been purged successfully.')
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
